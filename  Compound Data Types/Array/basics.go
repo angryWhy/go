@@ -42,7 +42,7 @@ func changeArr(arr [3]int) {
 }
 
 // 传指针
-func changeArrOK(arr *[len(arr)]int) {
+func changeArrOK(arr *[3]int) {
 	arr[0] = 99
 	fmt.Printf("函数的数组-指针%v\n", arr)
 }
