@@ -42,7 +42,23 @@ func changeArr(arr [3]int) {
 }
 
 // 传指针
-func changeArrOK(arr *[3]int) {
+func changeArrOK(arr *[len(arr)]int) {
 	arr[0] = 99
 	fmt.Printf("函数的数组-指针%v\n", arr)
+}
+
+// 循环
+func forArr() {
+	a := [...]int{124, 12, 66, 34, 12}
+	for k, v := range a {
+		fmt.Printf("键%d，值%d\n", k, v)
+	}
+}
+
+// 循环不要键
+func forArr2() {
+	a := [...]int{124, 12, 66, 34, 12}
+	for _, v := range a {
+		fmt.Printf("值%d\n", v)
+	}
 }
