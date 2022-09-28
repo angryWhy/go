@@ -106,3 +106,23 @@ slice[i:]，引用着i到len(s)-1，最后一个元素，相当于slice[i:len(s)
 
 slice[:]，引用着整个数组
 
+因为slice包含了***指向数组元素的指针***，将一个slice传递给函数的时候，可以在***函数内部修改底层数组的元素***
+
+```go
+var arr = [...]int{1,2,3,4,5}
+func reverse (s []int){
+	for i,j :=0,len(s)-1;i<j;i,j = i+1,j-1{
+		s[i],s[j] = s[j],s[i]
+	}
+}
+//output:5,4,3,2,1
+reverse(arr[:])
+```
+
+#### 区别
+
+arr :=[3]int{1,2,3}
+
+s :=[]int{1,2,3}
+
+初始化slice和初始化数组，slice***没有指定长度***，创建有固定的长度的数组和创建指向数组的slice，
