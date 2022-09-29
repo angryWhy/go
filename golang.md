@@ -127,3 +127,96 @@ s :=[]int{1,2,3}
 
 初始化slice和初始化数组，slice***没有指定长度***，创建有固定的长度的数组和创建指向数组的slice
 
+#### 比较
+
+不能用==来比较两个slice是否有两个相同的元素
+
+如果底层数组元素改变，同一个slice在不同时间有不同的元素
+
+slice唯一允许的比较操作是和nil作比较
+
+make函数
+
+创建一个无名数组并返回了一个它的slice
+
+```go
+make(T[],len)
+make(T[],len,cap)
+```
+
+### append函数
+
+append函数用来将元素追加到slice后面
+
+对于任何函数，只要有可能改变slice的长度或者容量，或使slice指向不同的底层数组，都需要更新slice的变量
+
+```go
+var runes []rune
+	for _, v := range "hello,你好" {
+		runes = append(runes, v)
+	}
+	fmt.Printf("%q\n", runes)
+```
+
+```go
+func main() {
+	s := make([]int, 3)
+	fmt.Printf("原切片%v,%d,%d，%p\n", s, len(s), cap(s), &s)
+	appendSlice(s)
+	fmt.Printf("原切片%v,%d,%d,%p\n", s, len(s), cap(s), &s)
+}
+func appendSlice(s []int) {
+	s[0] = 9
+	s = append(s, 1)
+	//fmt.Printf("%v", s)
+	fmt.Printf("子切片%v,%d,%d,%p\n", s, len(s), cap(s), &s)
+}
+//append追加元素后，不影响母切片
+
+```
+
+##### 方法一
+
+```go
+func demo() {
+	data := []string{"one", "", "three"}
+	res := noempty(data)
+	fmt.Printf("%q\n", res)  //"one","three"
+	fmt.Printf("%q\n", data) //"one", "three", "three"
+
+}
+
+func noempty(strings []string) []string {
+	i := 0
+	for _, v := range strings {
+		if v != "" {
+			strings[i] = v
+			i++
+		}
+	}
+	return strings
+}
+```
+
+##### 方法二
+
+```go
+func useAppend() {
+	data := []string{"one", "", "three"}
+	fmt.Printf("%q\n", data) //"one","","three"
+	res := noempty1(data)
+	fmt.Printf("%q\n", res)  //"one","three","three"
+	fmt.Printf("%q\n", data) //"one", "three", "three"
+}
+func noempty1(strings []string) []string {
+    //相当于应用原始的slice的新的零长度的slice
+	out := strings[:0]
+	for _, v := range strings {
+		if v != "" {
+			out = append(out, v)
+		}
+	}
+	return strings
+}
+```
+

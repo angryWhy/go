@@ -26,3 +26,21 @@ func reverse(s []int) {
 		s[i], s[j] = s[j], s[i]
 	}
 }
+func demo() {
+	data := []string{"one", "", "three"}
+	res := noempty(data)
+	fmt.Printf("%q\n", res)  //"one","three"
+	fmt.Printf("%q\n", data) //"one", "three", "three"
+
+}
+
+func noempty(strings []string) []string {
+	i := 0
+	for _, v := range strings {
+		if v != "" {
+			strings[i] = v
+			i++
+		}
+	}
+	return strings
+}
