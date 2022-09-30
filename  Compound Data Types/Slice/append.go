@@ -24,7 +24,7 @@ func useAppend() {
 	data := []string{"one", "", "three"}
 	fmt.Printf("%q\n", data) //"one","three"
 	res := noempty1(data)
-	fmt.Printf("%q\n", res)  //"one","three"
+	fmt.Printf("%q\n", res)  //"one","three","three"
 	fmt.Printf("%q\n", data) //"one", "three", "three"
 }
 func noempty1(strings []string) []string {
@@ -36,4 +36,7 @@ func noempty1(strings []string) []string {
 		}
 	}
 	return strings
+}
+func subSlice() {
+
 }

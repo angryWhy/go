@@ -231,3 +231,62 @@ map是对散列表的引用，m[k]v（m[键类型]值类型）
 #### 创建
 
 可以使用make函数来创建  
+
+```go
+ages :=make(map[int]string)
+ages := map(int)int{1:2,2:3}
+```
+
+#### 访问
+
+map通过下标访问值
+
+通过delete删除
+
+```
+ages :=make(map[int]string)
+ages[1] = "2"
+delete(ages,1)
+```
+
+即使对应的键不存在，就返回值的***零值***
+
+map元素的地址***不能获取***，不是一个变量
+
+for循环结合range关键字来遍历map中所有的键和对应的值,***顺序不固定***
+
+```、
+func main() {
+	ages := make(map[string]int)
+	names := map[int]int{1: 2}
+	fmt.Println(ages, names)
+}
+func sortNames(names map[int]int) {
+	sl := make([]int, 0, len(names))
+	for _, v := range names {
+		sl = append(sl, v)
+	}
+	sort.Ints(sl)
+	for _, v := range sl {
+		fmt.Println(v)
+	}
+}
+```
+
+map类型的***零值是nil***，也就是说，没有引用任何散列表
+
+```go
+var map map[int]int
+map == nil
+len(map) == 0
+```
+
+向nil的map直接设置值，会导致报错，***必须要初始化***
+
+```go
+var mapa map[int]int
+mapa[1] = 1
+//panic: assignment to entry in nil map 
+```
+
+通过下标访问，总会有值，如果没有则为对应类型的零值
