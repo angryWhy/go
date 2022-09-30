@@ -322,3 +322,4 @@ func equal(x, y map[int]int) bool {
 }
 ```
 
+map的值本身可以是复合数据类型，例如map和slice
