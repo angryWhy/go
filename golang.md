@@ -135,7 +135,7 @@ s :=[]int{1,2,3}
 
 slice唯一允许的比较操作是和nil作比较
 
-make函数
+#### make函数
 
 创建一个无名数组并返回了一个它的slice
 
@@ -255,7 +255,7 @@ map元素的地址***不能获取***，不是一个变量
 
 for循环结合range关键字来遍历map中所有的键和对应的值,***顺序不固定***
 
-```、
+```go
 func main() {
 	ages := make(map[string]int)
 	names := map[int]int{1: 2}
@@ -289,4 +289,36 @@ mapa[1] = 1
 //panic: assignment to entry in nil map 
 ```
 
-通过下标访问，总会有值，如果没有则为对应类型的零值
+通过下标访问，总会有值，如果没有则为对应类型的零值，安全判断
+
+通过下标访问，会输出两个值第二个值是布尔值，用来说明值是否存在
+
+```go
+names := map[int]int{1: 2}
+value,ok :=names[1]
+if ok{
+	//执行操作
+}
+if value,ok := names[1];!ok{
+	//执行操作操作
+}
+```
+
+#### 比较
+
+和slice一样不可比较,自己写一个比较的函数
+
+```go
+func equal(x, y map[int]int) bool {
+	if len(x) != len(y) {
+		return false
+	}
+	for k, v := range x {
+		if value, ok := y[k]; !ok || value != v {
+			return false
+		}
+	}
+	return true
+}
+```
+

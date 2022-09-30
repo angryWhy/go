@@ -33,3 +33,14 @@ func define() {
 		//执行操作操作
 	}
 }
+func equal(x, y map[int]int) bool {
+	if len(x) != len(y) {
+		return false
+	}
+	for k, v := range x {
+		if value, ok := y[k]; !ok || value != v {
+			return false
+		}
+	}
+	return true
+}
