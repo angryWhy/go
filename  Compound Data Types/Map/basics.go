@@ -31,7 +31,9 @@ func define() {
 	}
 	if value, ok := names[1]; !ok {
 		//执行操作操作
+		fmt.Println(value)
 	}
+	fmt.Println(value)
 }
 func equal(x, y map[int]int) bool {
 	if len(x) != len(y) {

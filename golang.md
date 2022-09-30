@@ -1,6 +1,6 @@
 # Go
 
-## 复合数据类型
+# 复合数据类型
 
 ## Array
 
@@ -291,7 +291,7 @@ mapa[1] = 1
 
 通过下标访问，总会有值，如果没有则为对应类型的零值，安全判断
 
-通过下标访问，会输出两个值第二个值是布尔值，用来说明值是否存在
+通过下标访问，会输出两个值，***第二个值是布尔值***，用来说明值是否存在
 
 ```go
 names := map[int]int{1: 2}
@@ -306,7 +306,7 @@ if value,ok := names[1];!ok{
 
 #### 比较
 
-和slice一样不可比较,自己写一个比较的函数
+和slice一样***不可比较***,自己写一个比较的函数
 
 ```go
 func equal(x, y map[int]int) bool {
@@ -323,3 +323,18 @@ func equal(x, y map[int]int) bool {
 ```
 
 map的值本身可以是复合数据类型，例如map和slice
+
+## Struct
+
+结构体是将零个或者多个***任意类型的命名变量***组合在一起的***聚合***数据类型
+
+#### 创建
+
+```go
+type User struct{
+	ID	    int
+    name	string
+    bir		time.Time
+}
+```
+
