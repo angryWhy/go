@@ -328,7 +328,13 @@ map的值本身可以是复合数据类型，例如map和slice
 
 结构体是将零个或者多个***任意类型的命名变量***组合在一起的***聚合***数据类型
 
+相同类型的成员变量可以写在一行
+
 #### 创建
+
+结构体不可以定一个和自己一样的结构体作为自己的成员变量，***不能包含自己***
+
+结构体的零值是有结构体成员的零值组成的，没有任何成员变量的结构体成为空结构体，struct{}
 
 ```go
 type User struct{
@@ -336,5 +342,128 @@ type User struct{
     name	string
     bir		time.Time
 }
+```
+
+####  访问
+
+struct每一个成员变量都通过  ***.***  来访问，或者获取成员变量的地址，通过指针来访问它
+
+  ***.***  也可以应用到结构体的指针上
+
+如果结构体变量名称是***大写***的，那么这个变量是可以***导出***的，结构体可以包含可导出和不可以导出的变量
+
+```go
+type User struct{
+	ID	    int
+    name	string
+    bir		time.Time
+}
+var wang User
+//.访问
+wang.ID = 999
+//变量地址
+value := &wang.ID
+value = 888
+//结构体指针
+var zhang *User = &wang 
+```
+
+#### 字面量
+
+1.按照正确顺序，为每个成员变量指定一个值
+
+2.指定变量的名称初始化赋值
+
+```go
+type Point struct{x,y int}
+p :=Point{1,2}
+p :=Point{x:2}
+```
+
+#### 指针
+
+结构体一般是通过指针使用
+
+```go
+pp :=&Point{1,2}
+//等价于
+pp :=new(Point)
+*pp = Point{1,2}
+```
+
+#### 比较
+
+如果成员变量都可以比较，那么结构体是可以比较的
+
+按成员变量的顺序比较
+
+```go
+type Point struct{x,y int}
+p :=Point{1,2}
+q :=Point{2,1}
+//p!=q
+```
+
+#### 匿名和嵌套
+
+结构体内允许定义***不带名称***的结构体成员，指定类型即可，叫做***匿名成员***
+
+匿名成员：必须是一个命名类型或者指向命名类型的指针
+
+```go
+type Point struct {
+	x, y int
+}
+type Circle struct {
+	Center Point
+	Radius int
+}
+type Wheel struct {
+	Circle Circle
+	Spokes int
+}
+
+func main() {
+	var w Wheel
+	w.Circle.Center.x = 8
+	w.Circle.Center.y = 9
+}
+//匿名
+type Circle struct {
+	Point
+	Radius int
+}
+type Wheel struct {
+	Circle
+	Spokes int
+}
+w.X = 8
+//初始化
+w = Wheel{
+    Circle:Circle{x:1,y:1},
+    spokes:20
+}
+```
+
+## JSON
+
+json.Marshal将go对象转换成json数据格式
+
+json.MarshalIndent格式化输出json，参数一：前缀字符串，参数二：缩进的字符串
+
+json.Unmarshal将json数据格式转换成go对象
+
+```go
+type movie struct {
+	Title string
+    Year   int `json:"relased"`
+    //omitempty，如果为零值或者为空，则不输出
+    Color bool `json:"color,omitempty"`
+}
+var mov = []movie{
+    {Title:"haha",Year:2000,Color:false}
+}
+//转换成JSON，json.Marshal
+json.Marshal(mov)
 ```
 
