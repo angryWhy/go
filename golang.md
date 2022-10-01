@@ -2,7 +2,7 @@
 
 # 复合数据类型
 
-## Array
+### Array
 
 #### 定义
 
@@ -82,7 +82,7 @@ a := [...]int{124, 12, 66, 34, 12}
 }
 ```
 
-## Slice
+### Slice
 
 #### 定义
 
@@ -220,7 +220,7 @@ func noempty1(strings []string) []string {
 }
 ```
 
-## Map
+### Map
 
 #### 定义
 
@@ -324,7 +324,7 @@ func equal(x, y map[int]int) bool {
 
 map的值本身可以是复合数据类型，例如map和slice
 
-## Struct
+### Struct
 
 结构体是将零个或者多个***任意类型的命名变量***组合在一起的***聚合***数据类型
 
@@ -445,7 +445,7 @@ w = Wheel{
 }
 ```
 
-## JSON
+### JSON
 
 json.Marshal将go对象转换成json数据格式
 
@@ -465,5 +465,75 @@ var mov = []movie{
 }
 //转换成JSON，json.Marshal
 json.Marshal(mov)
+```
+
+# 函数
+
+#### 定义
+
+函数包含函数***名字***、一个***形参列表***，可选的返回列表及函数体
+
+形参:指定了一组变量的参数名和参数类型
+
+​		 形参是函数的***局部变量***
+
+实参：***是按值传递的，每个函数接受的都是实参的副本，修改函数的形参变量不会影响到实参，除了引用类型(指针，		  slice、map、channel、)***
+
+返回列表：指定了函数返回值的类型，没有返回值则省略
+
+```go
+func name(params)(result-list){
+	body
+}
+//返回值
+func add (x,y int)int{
+	return x+y
+}
+func sub(x,y int)(z int){
+	z = x+y
+    return
+}
+```
+
+##### 函数签名
+
+两个函数拥有***相同的形参列表和返回列表***，认为这两个函数的类型或者签名是相同的，形参和返回值的名字不会影响函数类型
+
+#### 递归
+
+```go
+func fibonacci(n int) int {
+  if n < 2 {
+   return n
+  }
+  return fibonacci(n-2) + fibonacci(n-1)
+}
+ 
+func main() {
+    var i int
+    for i = 0; i < 10; i++ {
+       fmt.Printf("%d\t", fibonacci(i))
+    }
+```
+
+#### 返回值
+
+返回值，可以返回多个，使用返回值必须显示的赋值给变量
+
+返回值的结果可以是调用另外函数的返回的结果
+
+#### 函数变量
+
+函数类型的***零值是nil***，调用一个空函数会导致出错
+
+函数间***不可以进行比较***，***不能***相互比较或者作为***键值出现在map中***
+
+strings.map对每个字符进行函数调用，并连接返回
+
+```go
+func add (item rune) rune{
+	return item+1
+}
+strings.map(add,"HAL")//"IBM"
 ```
 
