@@ -573,3 +573,24 @@ values :=[]int{1,2,3}
 sum(values...)
 ```
 
+## 方法
+
+方法声明和普通函数的声明类似，在函数名称前多了一个参数，这个参数吧这个方法绑定到参数对应的类型上去。
+
+在一个结构体内，声明一个叫做x方法会与字段x发生冲突，不允许的
+
+```go
+type Point struct{
+	x,y int
+}
+func sum(p,q Point){
+    z := p.x +q.x
+}
+//参数p成为方法的接收者
+func(p Point) center(x int){
+	return p.x + x
+}
+//方法调用
+p.center(q)
+```
+
