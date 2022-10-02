@@ -7,6 +7,10 @@ import (
 
 func main() {
 	fmt.Println(strings.Map(add3, "HAL"))
+	//调用
+	//显示的声明一个数组，将实参复制给这个数组
+	values := []int{1, 2, 3}
+	sum(values...)
 }
 
 //	func name(params)(result-list){
@@ -29,4 +33,11 @@ func fibonacci(n int) int {
 }
 func add3(item rune) rune {
 	return item + 1
+}
+func sum(values ...int) int {
+	total := 0
+	for _, v := range values {
+		total += v
+	}
+	return total
 }

@@ -537,3 +537,39 @@ func add (item rune) rune{
 strings.map(add,"HAL")//"IBM"
 ```
 
+#### 匿名函数
+
+匿名函数只能在包级别的作用域进行声明，函数字面量在使用的时候指定函数变量
+
+go语言也有闭包
+
+```go
+func squares (){
+	var x int
+	return func()int{
+		x++
+		return x
+	}
+}
+```
+
+#### 可变参数
+
+可变参数的函数，参数列表最后的类型名称之前用省略号声明可变参数
+
+func( []int ) != func(...int)
+
+```go
+func sum (values ...int)int{
+    total := 0
+    for _,v := range values{
+    	total+ = v
+    }
+    return total
+}
+//调用
+//显示的声明一个数组，将实参复制给这个数组
+values :=[]int{1,2,3}
+sum(values...)
+```
+
