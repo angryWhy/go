@@ -1,6 +1,115 @@
 # Go
 
+# 基础数据类型
+
+
+
+```go
+bool		 1字节		默认值：false
+byte		 1字节		默认值：uint8，取值范围[0,255]
+rune		 4字节		unicode ponit code int32
+int，uint     4或8字节   取决于操作系统，32或64
+int8,uint8	  1字节	 -128~127，0~255
+int16，uint16 2字节	
+float32
+float64
+complex64				  对应的实部或者虚部：float64
+complex128				  对应的实部或者虚部：float128
+uintptr
+```
+
+## string
+
+string每个元素称为字符：
+
+byte：1个字节，ASCII码的一个字符
+
+rune:4个字节，代表一个utf-8的字符，***一个汉字可以用一个rune表示***
+
+string底层是***byte数组***，可以转换成***[]byte或者[]rune***类型
+
+```go
+len(str)//默认的是[]byte类型
+for循环默认是[]rune类型
+```
+
+#### API
+
+```go
+len(str)			求长度
+strings.Split		分割
+strings.Contains	判断是否包含
+strings.HasPrefix	前后缀判断
+strings.index，lastindex	子串出现位置
+
+func split_str() {
+	s := "我是,123"
+	arr := strings.Split(s, ",")
+	fmt.Println(arr, arr[0])
+}
+func contains_str() {
+	s := "hello world"
+	fmt.Printf("%t\n", strings.Contains(s, "e"))
+}
+func before_after() {
+	s := "hello world"
+	fmt.Printf("%t\n", strings.HasPrefix(s, "he"))
+	fmt.Printf("%t\n", strings.HasSuffix(s, "ld"))
+}
+func str_func(){
+	s := "hello world"
+    ss := "lo"
+    position :=strings.Index(s,ss)
+}
+```
+
+#### 拼接
+
+加号连接
+
+func fmt.Sprintf( format string,a ...interface{}) string
+
+func strings.Join(elem []string,step) string
+
+strings.builder，大量连接，***效率最高***
+
+```go
+func join_str() {
+	s1 := "a"
+	s2 := "b"
+	s3 := "c"
+
+	str := s1 + " " + s2 + " " + s3
+	str2 := fmt.Sprintf("%s %s %s", s1, s2, s3)
+	str3 := strings.Join([]string{s1, s2, s3}, " ")
+	sb := strings.Builder{}
+	sb.WriteString(s1)
+	sb.WriteString(" ")
+	s4 := sb.String()
+	fmt.Println(str, str2, str3, s4)
+}
+```
+
+# 自定义类型
+
+```go
+type singal int8
+type flo float64
+type add func(a,b int)int
+```
+
 # 复合数据类型
+
+```go
+array		默认值：无		值类型
+struct		默认值：无		值类型
+string		默认值：""		 utf-8字符串
+slice		默认值：nil		 引用类型
+map			默认值：nil		 引用类型
+channel		默认值：nil		 引用类型
+interface	默认值：nil		  接口
+function	默认值：nil		  函数
+```
 
 ### Array
 
@@ -573,7 +682,7 @@ values :=[]int{1,2,3}
 sum(values...)
 ```
 
-## 方法
+# 方法
 
 方法声明和普通函数的声明类似，在函数名称前多了一个参数，这个参数吧这个方法绑定到参数对应的类型上去。
 
@@ -587,10 +696,25 @@ func sum(p,q Point){
     z := p.x +q.x
 }
 //参数p成为方法的接收者
-func(p Point) center(x int){
+func(p Point) center(x int) int{
 	return p.x + x
 }
 //方法调用
 p.center(q)
 ```
+
+指针传递变量的地址
+
+```
+r :=&Point{1,2}
+func sum(r *Point){
+
+}
+```
+
+# 接口
+
+接口类型是对其他类型行为的概括与抽象，接口类型是抽象类型
+
+一个接口类型定义了一套方法，如果一个具体类型要实现该接口，必须实现接口上的所有方法
 
