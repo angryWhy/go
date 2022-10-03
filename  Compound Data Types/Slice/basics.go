@@ -7,6 +7,7 @@ func main() {
 	//output:5,4,3,2,1
 	reverse(arr[:])
 	fmt.Printf("%v\n", arr)
+	slice_init()
 }
 func makeSlice() {
 	arr := [...]string{"haha", "hee", "kk", "ll", "aaa"}
@@ -43,4 +44,12 @@ func noempty(strings []string) []string {
 		}
 	}
 	return strings
+}
+func slice_init() {
+	s2 := [][]int{
+		{1, 2},
+		{3, 4, 5},
+		{6, 7, 8},
+	}
+	fmt.Printf("%d,%d,%d,%d", len(s2), len(s2[0]), len(s2[1]), len(s2[2]))
 }

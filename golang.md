@@ -117,6 +117,10 @@ function	默认值：nil		  函数
 
 数组是具有***固定长度***，拥有零个或者多个***相同数据类型***的元素序列
 
+数组是连续的内存空间，声明的时候必须指定长度，***长度不能改变***，声明的时候把内存空间分配好
+
+数组的***地址就是首元素地址***
+
 #### 初始化
 
 1.数组通过***索引***来访问元素，索引从0到数组长度-1，使用***len函数***返回数组的长度
@@ -127,7 +131,8 @@ function	默认值：nil		  函数
 
 ```go
 var a [3]int
-
+//根据index赋值
+var b = [3]int{2:99}
 //output：0,第一个元素
 fmt.Printf("%d\n",a[0])
 
@@ -189,6 +194,9 @@ a := [...]int{124, 12, 66, 34, 12}
 	for k, v := range a {
 		fmt.Printf("键%d，值%d\n", k, v)
 }
+for i :=0;i<len(a);i++{
+	
+}
 ```
 
 ### Slice
@@ -203,10 +211,24 @@ slice包括三个部分：***容量，长度，底层数组***
 
 容量：起始元素直底层数组的最后一个元素的个数
 
+***切片地址和数组首元素地址是两码事***
+
+```go
+type slice struct{
+	arr unsafe.Pointer
+    len int
+    cap int
+}
+```
+
 #### 创建
 
 ```go
-months :=string{1:"january",12:"december"}
+var s []int
+s = []int{}				//len=cap=0
+s = make([]int,3)		//初始化，len=3，cap=3
+s = make([]int,3,5)		//len=3,cap=5
+s = []int{1,2,3,4,5}	//len=cap=5
 ```
 
 slice[i:j]，（0<=i<=j<=cap(s)），***引用***着i到j-1个元素，即长度为j-i个
@@ -265,6 +287,15 @@ var runes []rune
 		runes = append(runes, v)
 	}
 	fmt.Printf("%q\n", runes)
+
+//append超出容量
+s := make([]int, 3, 5)
+	s = append(s, 1)
+	fmt.Printf("添加后的地址%p\n", s)
+	s = append(s, 1)
+	fmt.Printf("添加后的地址%p\n", s)
+	s = append(s, 1)
+	fmt.Printf("超出容量,添加后的地址%p\n", s)
 ```
 
 ```go
@@ -327,6 +358,15 @@ func noempty1(strings []string) []string {
 	}
 	return strings
 }
+```
+
+### 截取 子切片
+
+```go
+s :=make([]int,3,5)
+sub :=s[1:3]
+//刚开始子切片和母切片共享内存空间，修改子切片会反映到母切片上，在子切片执行append方法会把新元素添加到母切片预留的内存空间上
+//当子切片不断执行append，消耗完母切片的预留空间，子切片和母切片会发生内存分离，没有关系
 ```
 
 ### Map

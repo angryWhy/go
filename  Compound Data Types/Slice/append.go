@@ -12,7 +12,7 @@ func main() {
 	fmt.Printf("原切片%v,%d,%d，%p\n", s, len(s), cap(s), &s)
 	appendSlice(s)
 	fmt.Printf("原切片%v,%d,%d,%p\n", s, len(s), cap(s), &s)
-	useAppend()
+	subSlice()
 }
 func appendSlice(s []int) {
 	s[0] = 9
@@ -38,5 +38,11 @@ func noempty1(strings []string) []string {
 	return strings
 }
 func subSlice() {
-
+	s := make([]int, 3, 5)
+	s = append(s, 1)
+	fmt.Printf("添加后的地址%p\n", s)
+	s = append(s, 1)
+	fmt.Printf("添加后的地址%p\n", s)
+	s = append(s, 1)
+	fmt.Printf("超出容量,添加后的地址%p\n", s)
 }

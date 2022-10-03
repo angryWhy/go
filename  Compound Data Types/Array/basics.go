@@ -8,6 +8,7 @@ func main() {
 	fmt.Printf("外层的数组%v\n", arr)
 	changeArrOK(&arr)
 	fmt.Printf("外层的数组-指针%v\n", arr)
+	point()
 }
 
 // 初始化数组
@@ -61,4 +62,10 @@ func forArr2() {
 	for _, v := range a {
 		fmt.Printf("值%d\n", v)
 	}
+}
+
+// 地址比较
+func point() {
+	a := [...]int{1: 3, 5: 8}
+	fmt.Printf("首地址%p，数组地址%p\n", &a, &a[0])
 }
