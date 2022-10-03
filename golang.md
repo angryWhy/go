@@ -375,7 +375,13 @@ sub :=s[1:3]
 
 拥有一对键值对的***无序***元素集合，***键的值***是***唯一***的，值可以***通过键***来获取、更新或者移除
 
-map是对散列表的引用，m[k]v（m[键类型]值类型）
+go map 底层是实现的***hash table***，根据key查找value的时间复杂度是***O(1)***
+
+key--->计算哈希值--->对槽位总数取模--->找到槽位
+
+冲突太多会***自动扩容***，增加槽位数，***重新分配***槽位
+
+map是对***散列表的引用***，***m[k]v（m[键类型]值类型）***
 
 #### 创建
 
@@ -384,6 +390,9 @@ map是对散列表的引用，m[k]v（m[键类型]值类型）
 ```go
 ages :=make(map[int]string)
 ages := map(int)int{1:2,2:3}
+var m map[int]int
+m = make(map[int]int) 		//cap=0
+m = make(map[int]int,10) 	//cap=10,减少扩容概率
 ```
 
 #### 访问
@@ -392,7 +401,7 @@ map通过下标访问值
 
 通过delete删除
 
-```
+```go
 ages :=make(map[int]string)
 ages[1] = "2"
 delete(ages,1)
