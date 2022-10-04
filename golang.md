@@ -482,6 +482,43 @@ func equal(x, y map[int]int) bool {
 
 map的值本身可以是复合数据类型，例如map和slice
 
+### Channel
+
+#### 定义
+
+channel底层是一个环形队列（先进先出），send(插入),和recv（取走）从同一个位置沿同一个方向顺序执行
+
+#### 声明
+
+```go
+var ch chan int
+ch = make(chan int,8)//初始化，滑行队列最多容纳8个元素
+```
+
+#### 访问
+
+```go
+var ch chan int
+//放入
+ch<-1
+//取出
+v := <-ch
+```
+
+#### 遍历
+
+```go
+var ch chan int
+close(ch)		//遍历管道前必须关闭
+for ele := range ch {
+	
+}
+for循环可以不用关闭channel
+range关闭管道
+```
+
+
+
 ### Struct
 
 结构体是将零个或者多个***任意类型的命名变量***组合在一起的***聚合***数据类型
@@ -766,4 +803,119 @@ func sum(r *Point){
 接口类型是对其他类型行为的概括与抽象，接口类型是抽象类型
 
 一个接口类型定义了一套方法，如果一个具体类型要实现该接口，必须实现接口上的所有方法
+
+## 控制流程
+
+### if
+
+```go
+if 9>5{
+	
+}
+//逻辑表达式成立，执行{}内容
+//逻辑表达式不需要加（）
+//{不能另起一行
+
+if k,v :=2,3;v>k{
+	
+}
+//初始化多个局部变量，分号后是逻辑判断
+//逻辑表达式可以有变量或常量
+//if语句仅包含一个分号，局部变量在if内有效
+if-esle if
+if c,d:=4,7;c>d{
+		
+}else if 5>10 {
+		
+}else if 5==5 {
+		
+}else {
+		
+}
+```
+
+### switch
+
+switch和case后面可以跟常量、变量或者函数表达式，只要他们数据类型相同就可以
+
+case后面可以跟多个值，只要一个值满足就可以
+
+```go
+color := "black"
+	switch color {
+	case "black":
+		fmt.Println()
+	case "red","black":
+		fmt.Println("多个case，满足一个即可")
+	default:
+		fmt.Println()
+	}
+```
+
+#### 空switch
+
+switch后面直接跟{}
+
+```go
+switch{
+	case add(5)>10:
+		fmt.Println()
+	default:
+		fmt.Println()
+	}
+```
+
+#### fallthrough
+
+fallthrough,满足条件继续向下执行
+
+```go
+switch{
+	case add(5)>10:
+		fmt.Println()
+    	fallthrough
+	default:
+		fmt.Println()
+	}
+```
+
+#### switch-type
+
+```go
+func switch_type() {
+	var num interface{} = 6.5
+	switch value := num.(type) {
+	case int:
+		fmt.Printf("int类型-%d", value)
+	case string:
+		fmt.Printf("string类型-%s", value)
+	}
+}
+```
+
+### for
+
+for初始化局部变量;条件表达式;后续操作
+
+```go
+for i:=0;i<100;i++
+//死循环
+for{}
+//只有条件判断，前后的分号不要
+```
+
+#### range
+
+for range拿到的是数组的拷贝
+
+```go
+//数组或者切片
+for i,ele := rang s
+//字符串
+for i,ele := rang "哈哈"     	//rune类型
+//遍历map
+for i,ele := rang m			//不保证顺序
+//遍历channel	，先close
+for i,ele := rang ch
+```
 
