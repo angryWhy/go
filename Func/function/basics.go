@@ -41,3 +41,13 @@ func sum(values ...int) int {
 	}
 	return total
 }
+func de() int {
+	i := 9
+	//这里是5，跟的是函数
+	defer func() {
+		fmt.Println(i)
+	}()
+	//这里是9，后面跟的是表达式，直接复制
+	defer fmt.Println(i)
+	return 5
+}

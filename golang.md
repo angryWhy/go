@@ -529,7 +529,9 @@ range关闭管道
 
 结构体不可以定一个和自己一样的结构体作为自己的成员变量，***不能包含自己***
 
-结构体的零值是有结构体成员的零值组成的，没有任何成员变量的结构体成为空结构体，struct{}
+定义结构体但是赋值，那么是对应的零值
+
+结构体的***零值***是有结构体成员的零值组成的，没有任何成员变量的结构体成为空结构体，struct{}
 
 ```go
 type User struct{
@@ -577,7 +579,7 @@ p :=Point{x:2}
 
 #### 指针
 
-结构体一般是通过指针使用
+结构体一般是通过指针使用,一般防止值拷贝
 
 ```go
 pp :=&Point{1,2}
@@ -637,6 +639,17 @@ w.X = 8
 w = Wheel{
     Circle:Circle{x:1,y:1},
     spokes:20
+}
+```
+
+#### 方法
+
+```go
+func (u User) say(){
+    fmt.Println(u.name)
+}
+func (_ User) say(){
+    fmt.Println(u.name)
 }
 ```
 
@@ -767,6 +780,31 @@ func sum (values ...int)int{
 values :=[]int{1,2,3}
 sum(values...)
 ```
+
+#### defer
+
+延迟调用函数（函数返回值前，释放一些资源）
+
+多个defer后注册的先执行
+
+```go
+func de() int {
+	i := 9
+	//这里是5，跟的是函数
+	defer func() {
+		fmt.Println(i)
+	}()
+    //这里是9
+    defer func(i int) {
+		fmt.Println(i)
+	}(i)
+	//这里是9，后面跟的是表达式，直接复制
+	defer fmt.Println(i)
+	return 5
+}
+```
+
+
 
 # 方法
 
@@ -919,3 +957,68 @@ for i,ele := rang m			//不保证顺序
 for i,ele := rang ch
 ```
 
+### break-continue
+
+break-continue用于控制最外层最靠近自己的for循环
+
+break:退出for循环，本轮break下面的代码不再执行
+
+```go
+func breakfn() {
+	arr := []int{1, 2, 3, 4, 5}
+	for i, v := range arr {
+		if i > 3 {
+			fmt.Printf("%d", v)
+		}
+	}
+}
+```
+
+continue：本轮continue代码不执行，直接进入下层循环
+
+```go
+func continuefn() {
+	arr := []int{1, 2, 3, 4, 5}
+	for i, v := range arr {
+		if i > 3 {
+			continue
+			//直接进入下一层循环
+		}
+		fmt.Printf("%d", v)
+	}
+}
+fun
+```
+
+### label
+
+简单的label
+
+```go
+func basic(){
+	var a = 3
+	me:
+		a+=3
+		goto me
+}
+```
+
+```go
+//当匹配到l1时候会继续执行下面的label
+func mul() {
+	i := 4
+	if i%2 == 0 {
+		goto l1
+	} else {
+		goto l2
+	}
+l1:
+	fmt.Printf("这是l1\n")
+	i += 3
+	fmt.Printf("i的值%d\n", i)
+l2:
+	i *= 7
+	fmt.Printf("这是l2\n")
+	fmt.Printf("i的值%d\n", i)
+}
+```
