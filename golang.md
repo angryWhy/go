@@ -838,11 +838,52 @@ func sum(r *Point){
 
 # 接口
 
-接口类型是对其他类型行为的概括与抽象，接口类型是抽象类型
+接口类型是对其他类型行为的概括与抽象，接口类型是抽象类型,只有方法
 
 一个接口类型定义了一套方法，如果一个具体类型要实现该接口，必须实现接口上的所有方法
 
-## 控制流程
+```go
+type tran interface{
+    move(int) string
+}
+```
+
+
+
+#### 类型断言
+
+```go
+func types(){
+	var i interface{}
+    if v,ok :=i.(int),ok;ok{
+        fmr.Println(v)
+    }	
+}
+func swtype(){
+    switch i.(type) {
+    case int :
+        //执行操作
+    case int,byte://是interface{}类型
+        //执行操作
+    }
+}
+```
+
+```go
+func one(arr ...float64) (float64, error) {
+	p := 1.0
+	for _, v := range arr {
+		p *= v
+	}
+	if p != 0 {
+		return 1.0 / p, nil
+	} else {
+		return 0, errors.New("")
+	}
+}
+```
+
+# 控制流程
 
 ### if
 
@@ -1022,3 +1063,22 @@ l2:
 	fmt.Printf("i的值%d\n", i)
 }
 ```
+
+# 反射
+
+### 定义
+
+***运行期间***探知对象的类型信息和内存结构、更新变量、调用他们的方法
+
+函数的参数类型是interface{},需要在运行时进行判断针对不同类型采用不同的处理方式没比如，json.Marshal(v interface{})
+
+在运行时候根据某些动态条件决定调用那些函数，根据配置文件执行相应的算子函数
+
+### 弊端
+
+代码难以维护
+
+编译期间不能发现类型错误，测试覆盖念难度大
+
+性能差，比代码慢一到二数量级
+
