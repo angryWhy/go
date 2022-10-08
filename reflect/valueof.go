@@ -104,3 +104,63 @@ func changemap() {
 	mvalue.SetMapIndex(reflect.ValueOf(1), reflect.ValueOf(false))
 
 }
+func sub() {
+
+}
+func callfn() {
+	//获取value
+	valuefn := reflect.ValueOf(sub)
+	//获取类型
+	typefn := valuefn.Type()
+	//获取参数个数
+	argnum := typefn.NumIn()
+	args := make([]reflect.Value, argnum)
+	for i := 0; i < argnum; i++ {
+		if typefn.In(i).Kind() == reflect.Int {
+			args[i] = reflect.ValueOf(i)
+		}
+	}
+	//输入切片，返回切片结果，调用函数
+	results := valuefn.Call(args)[0]
+	if typefn.Kind() == reflect.Int {
+		i := results.Interface().(int)
+		fmt.Println(i)
+	}
+}
+
+type user struct {
+	name string
+}
+
+func (_ user) say(a int) {
+
+}
+func callmethod() {
+	u := &user{
+		name: "name",
+	}
+	uValue := reflect.ValueOf(u)
+	//不能获得未导出的方法
+	sayMethod := uValue.MethodByName("say")
+	fmt.Println(sayMethod)
+	//没参数，传空切片
+	sayMethod.Call([]reflect.Value{})
+}
+
+func newMethod() {
+	u := reflect.TypeOf(user{})
+	//转换成value
+	value := reflect.New(u)
+	value.Elem().FieldByName("name").SetString("哈哈哈")
+	user := value.Interface().(*user)
+	fmt.Println(user)
+}
+func newSlice() {
+	var s []int
+	stype := reflect.TypeOf(s)
+	//通过反射创建
+	sliceValue := reflect.MakeSlice(stype, 3, 5)
+	sliceValue.Index(0).Set(reflect.ValueOf(1))
+	users := sliceValue.Interface().([]int)
+	fmt.Println(users)
+}
