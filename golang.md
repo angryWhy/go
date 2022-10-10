@@ -1438,3 +1438,63 @@ type transport struct {
 }
 ```
 
+# 标准库
+
+### 数学计算
+
+### 时间函数
+
+#### 时间格式化
+
+```go
+	time1 := "2022-10-10 10:10:10"
+	now := time.Now()
+	ts := now.Format(time1)
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	t, _ := time.ParseInLocation(time1, ts, loc)
+	fmt.Println(t)
+```
+
+#### 时间计算
+
+```
+
+```
+
+#### ticker-timer
+
+```go
+func tk() {
+	tk := time.NewTicker(1 * time.Second)
+	for i := 0; i < 3; i++ {
+		<-tk.C
+	}
+	tk.Stop()
+}
+func timer() {
+	ti := time.NewTimer(1 * time.Second)
+	<-ti.C
+	ti.Stop()
+}
+```
+
+### I/O操作
+
+#### 控制台写入
+
+```go
+	var s1, s2 string
+	fmt.Scan(&s1, &s2)
+	fmt.Println(s1, s2)
+```
+
+#### 打开文件
+
+```go
+//打开文件,传入文件路径，通常来读
+func os.Open(name string)(*os.File,error)
+//写文件
+fout,err :=os.OpenFile
+```
+
+### 编码
