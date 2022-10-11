@@ -1497,4 +1497,80 @@ func os.Open(name string)(*os.File,error)
 fout,err :=os.OpenFile
 ```
 
+#### 读文件
+
+```go
+func readFile() {
+	if fin, err := os.Open("go.mod"); err != nil {
+		fmt.Println(err)
+		return
+	} else {
+		defer fin.Close()
+		reader := bufio.NewReader(fin)
+		for {
+			if line, err := reader.ReadString('\n'); err == nil {
+				line = strings.TrimRight(line, "\n")
+				fmt.Println(line)
+			} else {
+				//读到末尾
+				if err == io.EOF {
+					if len(line) > 0 {
+						fmt.Println(line)
+					}
+					break
+				} else {
+					fmt.Println(err)
+					break
+				}
+			}
+		}
+	}
+}
+```
+
+#### 写文件
+
+```go
+func writeFile() {
+	if fo, err := os.OpenFile("a.txt", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666); err != nil {
+		fmt.Println(err)
+		return
+	} else {
+		defer fo.Close()
+		writer := bufio.NewWriter(fo)
+		writer.WriteString("我是写文件")
+		//强制清空缓存，把缓存写入磁盘
+		writer.Flush()
+	}
+}
+```
+
+#### 遍历目录
+
+```go
+func rangeDir(path string) error {
+	if subFiles, err := ioutil.ReadDir(path); err != nil {
+		return err
+	} else {
+		for _, file := range subFiles {
+			fmt.Println(file.Name())
+			if file.IsDir() {
+				if err := rangeDir(filepath.Join(path, file.Name())); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+```
+
 ### 编码
+
+# 并发
+
+进程内的多个线程共享系统资源，进程的创建和销毁切换比线程大很多
+
+从进程到线程再到协程，不断减少切换成本
+
+### Goroutine
