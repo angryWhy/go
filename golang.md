@@ -517,6 +517,12 @@ for循环可以不用关闭channel
 range关闭管道
 ```
 
+#### 同步与异步
+
+```
+
+```
+
 
 
 ### Struct
@@ -1573,4 +1579,66 @@ func rangeDir(path string) error {
 
 从进程到线程再到协程，不断减少切换成本
 
-### Goroutine
+### Goroutine 
+
+父协程结束后，子协程并不会结束
+
+main协程结束后，所有协程都会结束
+
+##### 创建
+
+```go
+//有名函数
+func add(a, b int) {
+	v := a + b
+	fmt.Println(v)
+}
+go add(2, 3)
+//匿名函数
+go func(a, b int) {
+		fmt.Println(a + b)
+	}(2, 2)
+```
+
+##### sync
+
+```go
+//sync包
+	wg := sync.WaitGroup{}
+	//计数器：10个协程
+	wg.Add(10)
+	for i := 0; i < 10; i++ {
+		go func(a, b int) {
+			defer wg.Done()
+			//do something
+		}(i, i+1)
+	}
+	//等待为0
+	wg.Wait()
+```
+
+sync.once
+
+只加载一次
+
+```go
+var resource map[int]int
+var loadResource sync.Once
+
+func loadRe() {
+	loadResource.Do(func() {
+		resource[1] = 1
+	})
+}
+```
+
+##### panic
+
+发生：主动调用panic，程序错误
+
+panic执行什么：1.逆序执行当前的groutine的defer链（recover从这里介入）
+
+​						   2.打印错误信息和调用堆栈
+
+​						   3.调用exit(2)结束这个进程
+
