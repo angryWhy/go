@@ -21,4 +21,16 @@ func main() {
 		ch <- struct{}{}
 	}()
 	time.Sleep(10 * time.Second)
+	closeChan()
+}
+func closeChan() {
+	ch := make(chan int, 2)
+	ch <- 1
+	ch <- 2
+	close(ch)
+	for ele := range ch {
+		fmt.Println(ele)
+	}
+	v := <-ch
+	fmt.Println(v)
 }

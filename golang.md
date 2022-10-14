@@ -519,11 +519,23 @@ range关闭管道
 
 #### 同步与异步
 
+关闭channel后，读操作会立即返回，如果channel没有元素，返回零值
+
+不能重复关闭，不能关闭值为nil
+
+不能向已关闭的channel写入
+
+```go
+ch := make(chan int, 2)
+	ch <- 1
+	ch <- 2
+	close(ch)
+	for ele := range ch {
+		fmt.Println(ele)
+	}
+	v := <-ch
+	fmt.Println(v)
 ```
-
-```
-
-
 
 ### Struct
 
@@ -1642,3 +1654,51 @@ panic执行什么：1.逆序执行当前的groutine的defer链（recover从这�
 
 ​						   3.调用exit(2)结束这个进程
 
+### 并发安全
+
+##### 资源竞争
+
+多协程修改同一块内存，产生资源竞争
+
+n++不是原子操作，多协程执行时会脏写
+
+```go
+	wg := sync.WaitGroup{}
+	wg.Add(1000)
+	n := 0
+	for i := 0; i < 1000; i++ {
+		go func() {
+			defer wg.Done()
+			n++
+			//atomic.AddInt32(&n, 1)
+		}()
+	}
+	wg.Wait()
+	fmt.Println(n)
+```
+
+
+
+```go
+//原子操作
+func atomic.AddInt32(addr *int32,delta int32)(new int32)
+func atomic.LoadInt32(addr *int32)(val int32)
+```
+
+```go
+//读写锁
+var lock sync.RWMutex
+//写锁
+lock.Lock()，lock.UnLock()
+//读锁
+lock.RLock() lock.RUnlock()
+//任意时刻，只可以加一把写锁，且不能加读锁
+```
+
+
+
+### 多路复用
+
+### 协程泄漏
+
+### 协程管理
