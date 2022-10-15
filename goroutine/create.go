@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"sync"
 )
 
-var wg = sync.WaitGroup{}
+//var wg = sync.WaitGroup{}
 
 func add1() {
 	defer wg.Done()

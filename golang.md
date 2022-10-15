@@ -1675,9 +1675,17 @@ n++不是原子操作，多协程执行时会脏写
 	}
 	wg.Wait()
 	fmt.Println(n)
+//期望：1000
+//实际：960左右
+
+//方式一：原子操作
+atomic.AddInt32(&n, 1)
+//方式二：加锁
+var lock sync.RWMutex
+lock.Lock()
+n++
+lock.Unlock()
 ```
-
-
 
 ```go
 //原子操作
@@ -1693,6 +1701,7 @@ lock.Lock()，lock.UnLock()
 //读锁
 lock.RLock() lock.RUnlock()
 //任意时刻，只可以加一把写锁，且不能加读锁
+//同时上读锁
 ```
 
 
