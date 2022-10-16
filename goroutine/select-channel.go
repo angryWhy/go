@@ -14,7 +14,7 @@ func main() {
 	go abort(abortCh)
 LOOP:
 	for {
-		2
+
 		select {
 		case n := <-countCh:
 			fmt.Println(n)

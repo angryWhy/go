@@ -1711,3 +1711,75 @@ lock.RLock() lock.RUnlock()
 ### 协程泄漏
 
 ### 协程管理
+
+# http库
+
+#### 模拟服务端
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func main() {
+	http.HandleFunc("/boy", handleboy)
+	//把服务起来,不发生err，就会一直阻塞
+	http.ListenAndServe(":8080", nil)
+}
+func handleboy(w http.ResponseWriter, r *http.Request) {
+	io.Copy(os.Stdout, r.Body)
+	fmt.Fprintln(w, "hello")
+}
+```
+
+#### 模拟客户端
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+)
+
+func main() {
+	get()
+	post()
+}
+func get() {
+	resp, err := http.Get("http://localhost:8080/boy")
+	if err != nil {
+		panic(err)
+	}
+	for k, v := range resp.Header {
+		fmt.Printf("%s = %v", k, v)
+	}
+	fmt.Println(resp.Proto)
+	fmt.Println(resp.Status)
+	io.Copy(os.Stdout, resp.Body)
+	defer resp.Body.Close()
+}
+func post() {
+	reader := strings.NewReader("hello serve")
+	resp, err := http.Post("http://localhost:8080/boy", "text/plain", reader)
+	if err != nil {
+		panic(err)
+	}
+	for k, v := range resp.Header {
+		fmt.Printf("%s = %v", k, v)
+	}
+	fmt.Println(resp.Proto)
+	fmt.Println(resp.Status)
+	io.Copy(os.Stdout, resp.Body)
+	defer resp.Body.Close()
+}
+```
+
