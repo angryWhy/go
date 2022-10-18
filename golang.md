@@ -1727,6 +1727,7 @@ import (
 )
 
 func main() {
+    //对/boy进行处理
 	http.HandleFunc("/boy", handleboy)
 	//把服务起来,不发生err，就会一直阻塞
 	http.ListenAndServe(":8080", nil)
@@ -1751,7 +1752,9 @@ import (
 )
 
 func main() {
+    //简单get请求
 	get()
+    //简单post请求
 	post()
 }
 func get() {
@@ -1759,15 +1762,19 @@ func get() {
 	if err != nil {
 		panic(err)
 	}
+    //打印header信息
 	for k, v := range resp.Header {
 		fmt.Printf("%s = %v", k, v)
 	}
+    //打印协议
 	fmt.Println(resp.Proto)
+    //打印状态
 	fmt.Println(resp.Status)
 	io.Copy(os.Stdout, resp.Body)
 	defer resp.Body.Close()
 }
 func post() {
+    //写服务端控制台打印信息
 	reader := strings.NewReader("hello serve")
 	resp, err := http.Post("http://localhost:8080/boy", "text/plain", reader)
 	if err != nil {
@@ -1780,6 +1787,32 @@ func post() {
 	fmt.Println(resp.Status)
 	io.Copy(os.Stdout, resp.Body)
 	defer resp.Body.Close()
+}
+```
+
+#### 复杂请求
+
+```go
+func complexHttpRequest() {
+	//请求体，io.reader
+	reader := strings.NewReader("hello complex")
+	re, err := http.NewRequest("POST", "http://localhost:8080/boy", reader)
+	if err != nil {
+		panic(err)
+	}
+	//自定义请求头
+	re.Header.Add("User-Agent", "china")
+	re.Header.Add("User-Agent", "head-value")
+	//自定义cookie
+	re.AddCookie(&http.Cookie{
+		Name:  "auth",
+		Value: "haha",
+	})
+	//创建cilent
+	cilent := &http.Client{}
+	//提交http请求
+	cilent.Do(re)
+	defer re.Body.Close()
 }
 ```
 
