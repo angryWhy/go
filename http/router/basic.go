@@ -16,6 +16,10 @@ func main() {
 	//返回静态文件
 	router.ServeFiles("/file/*filepath", http.Dir("./static"))
 	http.ListenAndServe(":8080", router)
+	router.GET("/painc", panicHandle)
+	router.PanicHandler = func(writer http.ResponseWriter, request *http.Request, i interface{}) {
+		fmt.Fprint(writer, "报错了")
+	}
 }
 func get(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	fmt.Printf("request method:%s\n", r.Method)
@@ -26,6 +30,7 @@ func get(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	fmt.Fprint(w, "hello get")
 	//等价
 	//w.Write([]byte("hello get"))
+
 }
 func post(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	fmt.Printf("request method:%s\n", r.Method)
@@ -39,4 +44,10 @@ func post(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 }
 func getParams(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	fmt.Printf("name=%s age=%s \n", params.ByName("name"), params.ByName("age"))
+}
+func panicHandle(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	var a int
+	a = 0
+	b := 10 / a
+	fmt.Println(b)
 }
